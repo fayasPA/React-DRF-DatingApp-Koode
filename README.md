@@ -68,3 +68,7 @@ use pg_dump :
 
 
 # to remove docker images - docker rmi -f $(docker images -a -q)
+
+
+server git ssh- Your public key has been saved in /root/.ssh/id_ed25519.pub
+                passphrase - entergit
