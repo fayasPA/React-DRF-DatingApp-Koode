@@ -11,11 +11,23 @@ import LineChart from "../../components/LineChart";
 import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
+import { useEffect, useState } from "react";
+import axios from "../../axios";
+import { statistics } from "../../Constants/Constants";
 
 
 const Dashboard = () => {
     const theme = useTheme();
+    const [chatCount, setChatCount] = useState('');
+    const [userCount, setUserCount] = useState('');
     const colors = tokens(theme.palette.mode)
+    useEffect(() => {
+        axios.get(statistics).then((res)=> {
+            console.log(res.data, 'stats')
+            setChatCount(res.data.chat_count)
+            setUserCount(res.data.user_count)
+        })
+    },[])
     return (
         <Box m="20px">
             <Box display="flex" justifyContent="start" alignItems="center">
@@ -30,51 +42,17 @@ const Dashboard = () => {
                 gap="20px"
             >
                 {/* Row 1 */}
-                <Box gridColumn={{ xs: 'span 1', sm: 'span 3', md: 'span 3' }}
-                    backgroundColor={colors.primary[400]}
-                    display="flex" alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title="12,361"
-                        subtitle="Emails sent"
-                        progress="0.75"
-                        increase="+14%"
-                        icon={
-                            <EmailIcon
-                                sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />
-                        }
-                    />
-                </Box>
+
                 <Box
-                    gridColumn={{ xs: 'span 1', sm: 'span 3', md: 'span 3' }}
+                    gridColumn={{ xs: 'span 1', sm: 'span 6', md: 'span 6' }}
                     backgroundColor={colors.primary[400]}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
                 >
                     <StatBox
-                        title="431,225"
-                        subtitle="Sales Obtained"
-                        progress="0.50"
-                        increase="+21%"
-                        icon={
-                            <PointOfSaleIcon
-                                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-                            />
-                        }
-                    />
-                </Box>
-                <Box
-                    gridColumn={{ xs: 'span 1', sm: 'span 3', md: 'span 3' }}
-                    backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatBox
-                        title="32,441"
-                        subtitle="New Clients"
+                        title={userCount}
+                        subtitle="Users"
                         progress="0.30"
                         increase="+5%"
                         icon={
@@ -84,28 +62,25 @@ const Dashboard = () => {
                         }
                     />
                 </Box>
-                <Box
-                    gridColumn={{ xs: 'span 1', sm: 'span 3', md: 'span 3' }}
+                <Box gridColumn={{ xs: 'span 1', sm: 'span 6', md: 'span 6' }}
                     backgroundColor={colors.primary[400]}
-                    display="flex"
-                    alignItems="center"
+                    display="flex" alignItems="center"
                     justifyContent="center"
                 >
                     <StatBox
-                        title="1,325,134"
-                        subtitle="Traffic Received"
-                        progress="0.80"
-                        increase="+43%"
+                        title={chatCount}
+                        subtitle="Currently Chatting"
+                        progress="0.75"
+                        increase="+14%"
                         icon={
-                            <TrafficIcon
-                                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-                            />
+                            <EmailIcon
+                                sx={{ color: colors.greenAccent[600], fontSize: "26px" }} />
                         }
                     />
                 </Box>
                 {/* Row 2 */}
                 <Box
-                    gridColumn={{ xs: 'span 1', sm: 'span 6', md: 'span 8' }}
+                    gridColumn={{ xs: 'span 1', sm: 'span 12', md: 'span 12' }}
                     gridRow="span 2"
                     backgroundColor={colors.primary[400]}
                 >
@@ -118,11 +93,11 @@ const Dashboard = () => {
                     >
                         <Box>
                             <Typography variant="h5" fontWeight="600" color={colors.grey[100]} >
-                                Revenue Generated
+                                Users
                             </Typography>
-                            <Typography variant="h3" fontWeight="500" color={colors.greenAccent[500]} >
-                                $59,322,322
-                            </Typography>
+                            {/* <Typography variant="h3" fontWeight="500" color={colors.greenAccent[500]} >
+                                {userCount}
+                            </Typography> */}
                         </Box>
 
                         <Box>
@@ -138,95 +113,45 @@ const Dashboard = () => {
                         <LineChart isDashboard={true} />
                     </Box>
                 </Box>
-                {/* Transactions */}
-                <Box gridColumn={{ xs: 'span 1', sm: 'span 6', md: 'span 4' }}
+                {/* Row 3 */}
+                <Box
+                    gridColumn={{ xs: 'span 1', sm: 'span 6', md: 'span 6' }}
                     gridRow="span 2"
                     backgroundColor={colors.primary[400]}
-                    overflow="auto"
+                    p="30px"
                 >
-                    <Box display="flex"
-                        justifyContent="space-between"
+                    <Typography variant="h5" fontWeight="600">
+                        Chats
+                    </Typography>
+                    <Box
+                        display="flex"
+                        flexDirection='column'
                         alignItems="center"
-                        borderBottom={`4px solid ${colors.primary[500]}`}
-                        color={colors.grey[100]}
-                        p="15px">
-                        <Typography color={colors.grey[100]}
-                            variant="h5"
-                            fontWeight="600"
-                        >
-                            Recent Transactions
+                        mt="25px"
+                    >
+                        <ProgressCircle size="125" />
+                        <Typography variant="h5" color={colors.greenAccent[500]} sx={{ mt: "15px" }}>
+                            `{chatCount} chat is happening`
                         </Typography>
+                        <Typography>Includes all the chats of users</Typography>
                     </Box>
-                    {mockTransactions.map((transaction, i) => (
-                        <Box
-                            key={`${transaction.txId}-${i}`}
-                            display="flex"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            borderBottom={`4px solid ${colors.primary[500]}`}
-                            p="15px"
-                        >
-                            <Box>
-                                <Typography color={colors.greenAccent[500]}
-                                    variant="h5"
-                                    fontWeight="600"
-                                >
-                                    {transaction.txId}
-                                </Typography>
-                                <Typography color={colors.grey[100]}
-                                    variant="h5"
-                                    fontWeight="600"
-                                >
-                                    {transaction.user}
-                                </Typography>
-                            </Box>
-                            <Box color={colors.grey[100]}>{transaction.date}</Box>
-                            <Box backgroundColor={colors.greenAccent[500]}
-                                p="5px 10px"
-                                borderRadius="4px "
-                            >{transaction.cost}</Box>
-                        </Box>
-                    ))}
                 </Box>
-                    {/* Row 3 */}
-                    <Box 
-                        gridColumn={{ xs: 'span 1', sm: 'span 6', md: 'span 6' }}
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
-                        p="30px"
-                    >
-                        <Typography variant="h5" fontWeight="600">
-                            Campaign
-                        </Typography>
-                        <Box
-                            display="flex"
-                            flexDirection='column'
-                            alignItems="center"
-                            mt="25px"
-                        >
-                            <ProgressCircle size="125" />
-                            <Typography variant="h5" color={colors.greenAccent[500]} sx={{mt: "15px"}}>
-                                $48,322 revenue generated
-                            </Typography>
-                            <Typography>Includes extra misc expenditures and costs</Typography>
-                        </Box>
-                    </Box>
 
-                    <Box 
-                        gridColumn={{ xs: 'span 1', sm: 'span 6', md: 'span 6' }}
-                        gridRow="span 2"
-                        backgroundColor={colors.primary[400]}
+                <Box
+                    gridColumn={{ xs: 'span 1', sm: 'span 6', md: 'span 6' }}
+                    gridRow="span 2"
+                    backgroundColor={colors.primary[400]}
+                >
+                    <Typography variant="h5" fontWeight="600" sx={{ p: "30px 30px 0 30px" }}>
+                        User Chats
+                    </Typography>
+                    <Box
+                        height="250px"
+                        mt="-20px"
                     >
-                        <Typography variant="h5" fontWeight="600" sx={{ p: "30px 30px 0 30px" }}>
-                            Sales Qty
-                        </Typography>
-                        <Box
-                            height="250px"
-                            mt="-20px"
-                        >
-                           <BarChart isDashboard={true} />
-                        </Box>
+                        <BarChart isDashboard={true} />
                     </Box>
+                </Box>
 
             </Box>
         </Box>

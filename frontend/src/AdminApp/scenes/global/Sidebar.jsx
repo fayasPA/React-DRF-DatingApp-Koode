@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { ProSidebar, Menu, MenuItem } from 'react-pro-sidebar'
 import "react-pro-sidebar/dist/css/styles.css";
-import { Box, Button, Hidden, IconButton, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { Box, Button, IconButton, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom';
 import { tokens } from '../../theme';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined'
-import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined'
 import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined'
 import PieChartOutlinedIcon from '@mui/icons-material/PieChartOutlined'
 import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined'
@@ -36,9 +35,10 @@ export const Sidebar = () => {
     const logoutHandle = () => {
         localStorage.removeItem("adminToken");
         navigate("/admin/login")
-      };
+    };
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
+    const Token = localStorage.getItem('adminToken').toUpperCase()
     const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('sm'));
     const [isCollapsed, setIsCollapsed] = useState(isSmallScreen);
     const [selected, setSelected] = useState('Dashboard')
@@ -92,18 +92,13 @@ export const Sidebar = () => {
 
                     {!isCollapsed && (
                         <Box mb="25px">
-                            <Box display="flex" justifyContent="center" alignItems="center">
-                                {/* <img src={"adminAvatar"} alt="profile-admin" width="100px" height="100px" style={{
-                                    cursor: "pointer", borderRadius: "50%"
-                                }} /> */}
-                            </Box>
                             <Box textAlign="center">
                                 <Typography variant='h2' color={colors.grey[100]} fontWeight="bold"
                                     sx={{
                                         m: "10px 0 0 "
                                     }}
-                                > Fayas</Typography>
-                                <Typography variant='h5' color={colors.greenAccent[500]}>Minglee Admin</Typography>
+                                > {Token}</Typography>
+                                <Typography variant='h5' color={colors.greenAccent[500]}>Koode Admin</Typography>
                             </Box>
                         </Box>
                     )}
@@ -156,15 +151,15 @@ export const Sidebar = () => {
                         />
                         <Box m={!isCollapsed ? undefined : "10px 0 0 -10px"} >
                             <Button color='inherit' onClick={logoutHandle}>
-                                <Item title={isCollapsed ? "": "LOG OUT"}
-                                to=""
-                                icon={<LogoutIcon />}
-                                selected={selected}
-                                setSelected={setSelected}
+                                <Item title={isCollapsed ? "" : "LOG OUT"}
+                                    to=""
+                                    icon={<LogoutIcon />}
+                                    selected={selected}
+                                    setSelected={setSelected}
                                 />
                             </Button>
                         </Box>
-                        
+
                     </Box>
                 </Menu>
             </ProSidebar>

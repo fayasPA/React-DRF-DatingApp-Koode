@@ -9,6 +9,7 @@ import MatchesPage from "./Pages/MatchesPage";
 import MessagePage from "./Pages/MessagePage";
 import NotificationPage from "./Pages/NotificationPage";
 import AccountsPage from "./Pages/AccountsPage";
+import UserAccountsPage from "./Pages/UserAccountsPage";
 
 function App() {
   const [theme, colorMode] = useMode();
@@ -22,6 +23,7 @@ function App() {
               <Route element={<PrivateRoutes />} >
                 <Route path="/" element={<HomePage />} exact/>
                   <Route path="/accounts" element={<AccountsPage />} />
+                  <Route path="/useraccounts/:id" element={<UserAccountsPage />} />
                 <Route path="/matches" element={<MatchesPage />} />
                 <Route path="/messages" element={<MessagePage />} />
                 <Route path="/notification" element={<NotificationPage />} />

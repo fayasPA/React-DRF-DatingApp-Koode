@@ -89,6 +89,7 @@ export const AuthProvider = ({children}) => {
       user:user,
       loginUser:loginUser,
       logOutUser: logOutUser,
+      authTokens:authTokens
     }
 
     return (

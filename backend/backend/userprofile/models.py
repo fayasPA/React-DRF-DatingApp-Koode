@@ -1,8 +1,6 @@
 from django.db import models
 from app.models import *
 import datetime
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
 from app.api.consumers import ChatConsumer
 
 class UserProfile(models.Model):
@@ -15,14 +13,6 @@ class UserProfile(models.Model):
     image2 = models.ImageField(null=True, blank=True, upload_to="")
     image3 = models.ImageField(null=True, blank=True, upload_to="")
 
-# class LikedUsers(models.Model):
-#     user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
-#     liked_user_id = models.IntegerField(blank=True,null=True)
-#     liked_date =models.DateTimeField(blank=True,null=True)
-#     is_matched = models.BooleanField(default=False)
-#     not_matched = models.BooleanField(default=False)
-#     result_date =models.DateTimeField(blank=True,null=True)
-    
 class LikedUser(models.Model):
     sender = models.ForeignKey(MyUser, related_name='liked_by_users', on_delete=models.CASCADE)
     reciever = models.ForeignKey(MyUser, related_name='liked_users', on_delete=models.CASCADE)
@@ -33,17 +23,6 @@ class LikedUser(models.Model):
         # Create a new notification with the appropriate type when a like is added
         notification = Notification(sender=self.sender, receiver=self.reciever, message=f'{self.sender.username} has shown an interest in you')
         notification.save()
-        # Send a real-time notification to the receiver using Django Channels
-        # channel_layer = get_channel_layer()
-        # print('channel entered-----------')
-        # async_to_sync(channel_layer.group_send)( 
-        #     f'user_{self.reciever.id}',
-        #     {
-        #         'type': 'notification',
-        #         'message': 'You have a new notification!',
-        #     }
-        # )
-
         super(LikedUser, self).save(*args, **kwargs)
 
 class Notification(models.Model):
@@ -71,16 +50,3 @@ class Message(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     # is_read = models.BooleanField(default=False)
-
-        # Send a real-time notification to the receiver using Django Channels
-    # def save(self, *args, **kwargs):
-        # channel_layer = get_channel_layer()
-        # print('channel entered-----------')
-        # async_to_sync(channel_layer.group_send)( 
-        #     f'user_{self.chat_id}',
-        #     {
-        #         'type': 'chat',
-        #         'message': 'You have a new msg!',
-        #     }
-        # )
-        # super(Message, self).save(*args, **kwargs)

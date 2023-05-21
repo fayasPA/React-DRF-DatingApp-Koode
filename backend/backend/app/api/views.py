@@ -60,7 +60,6 @@ def getRoutes(request):
 
 
 @api_view(['POST'])
-# @permission_classes([IsAuthenticated])
 def signup(request):
     """
     This method is used to add a new user into the database via 'form'.
@@ -103,8 +102,23 @@ def getUser(request, id):
     serializer = MyUserSerializer(currUser, many=False)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def userProfiles(request, id):
+    """
+    This method is used to get the user info.
+    param:
+        id - id of the user.
+
+    user: MyUser object got from the database.
+    serializer: serialized data of MyUser Object.
+    """
+    user = MyUser.objects.get(id=id)
+    user_profile = UserProfile.objects.get(user=user.id)
+    serializer = UserProfileDetailsSerializer(user_profile)
+    return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getAppUsers(request, id):
     """
     Used to get users needed to show at the homepage of the application.
@@ -129,6 +143,7 @@ def getAppUsers(request, id):
     return Response(serializer.data)
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def filterBy(request, id):
     """
     This method is used to filter the users to be shown at the homepage.
@@ -150,6 +165,22 @@ def filterBy(request, id):
         user_profile_data = UserProfileSerializer(user_profile).data
         user_data['user_profile'] = user_profile_data
     return Response(serializer.data)
+
+@api_view(['POST'])
+def searchUsers(request):
+    """
+    This method is used to get the users list according to the search item entered in the search bar.
+
+    data: search item passed through post request
+    searchedUsers: list of users corresponding to search item.
+    searchList: Serialized data of the result.
+    """
+    data = request.data
+    print(data['searchItem'],'---------')
+    searcheddUsers = MyUser.objects.filter(username__icontains=data['searchItem']).exclude(Q(is_superuser=True)).order_by('username')
+    searchList = MyUserSerializer(searcheddUsers, many=True)
+    print(searcheddUsers)
+    return Response(searchList.data)
 
 @api_view(['GET'])
 def profileDetails(request, id):
@@ -376,7 +407,7 @@ class admin_login(APIView):
 
 @api_view(['GET'])
 def getUsers(request):
-    user = MyUser.objects.all().exclude(is_superuser=True)
+    user = MyUser.objects.all().exclude(is_superuser=True).order_by('username')
     serializer = MyUserSerializer(user, many=True)
     return Response(serializer.data)
 
@@ -390,6 +421,26 @@ def userBlock(request, id):
     print(name, "fayas")
     return Response({'name': name})
 
+@api_view(['POST'])
+def editUsers(request, id):
+    """
+    This method is used to add or edit the "edit" section of the user.
+    param:
+        id - id of the user.
+
+    data: data passed through form from frontend.
+    currUser: UserProfile object of logged-in user.
+    """
+    data = request.data
+    editUser = MyUser.objects.get(id=id)
+    print(editUser,"-----")
+    editUser.first_name = data['firstName']
+    editUser.last_name = data['lastName']
+    editUser.age = data['age']
+    editUser.username = data['username']
+    editUser.save()
+    return Response()
+
 
 @api_view(['DELETE'])
 def userDelete(request, id):
@@ -397,3 +448,20 @@ def userDelete(request, id):
     name = user.username
     user.delete()
     return Response({'name': name})
+
+@api_view(['GET'])
+def statistics(request):
+    user = MyUser.objects.all().exclude(is_superuser=True)
+    user_count = user.count()
+    userSerializer = MyUserSerializer(user, many=True)
+    chats = Chat.objects.all()
+    chat_count = chats.count()
+    chatSerializer = ChatSerializer(chats, many=True)
+    print('statistics')
+    data = {
+        # 'user_data': userSerializer.data,
+        # 'chat_data': chatSerializer.data,
+        "user_count" : user_count,
+        "chat_count" : chat_count / 2
+    }
+    return Response(data)

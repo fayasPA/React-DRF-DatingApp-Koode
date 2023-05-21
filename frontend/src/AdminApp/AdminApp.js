@@ -12,31 +12,32 @@ import PrivateRoutes from "./Utils/PrivateRouteS";
 import Login from "./scenes/Login/Login";
 import { Provider } from 'react-redux';
 import store from './Redux/store';
-
+import SearchedUser from "./scenes/searchedUser/SearchedUser";
 
 function AdminApp() {
   const [theme, colorMode] = useMode();
 
-  return ( 
+  return (
     <ColorModeContext.Provider value={colorMode} >
       <ThemeProvider theme={theme} >
-      <CssBaseline />
-      <div className="app">
+        <CssBaseline />
+        <div className="app">
           <Provider store={store}>
-          <Routes >
-            <Route element={<PrivateRoutes />} >
-              <Route index path="/" element={<Dashboard />} exact />
-              <Route path="/team" element={<Team />}/>
-              <Route path="/form" element={<Form />} />
-              <Route path="/bar" element={<Bar />} />
-              <Route path="/line" element={<Line />} />
-              <Route path="/pie" element={<Pie />} />
-              <Route path="/geography" element={<Geography />} />
-            </Route>
-            <Route path="/login" element={<Login />} />
-          </Routes>
+            <Routes >
+              <Route element={<PrivateRoutes />} >
+                <Route index path="/" element={<Dashboard />} exact />
+                <Route path="/team" element={<Team />} />
+                <Route path="/form/:id" element={<Form />} />
+                <Route path="/searchuser/:id" element={<SearchedUser />} />
+                <Route path="/bar" element={<Bar />} />
+                <Route path="/line" element={<Line />} />
+                <Route path="/pie" element={<Pie />} />
+                <Route path="/geography" element={<Geography />} />
+              </Route>
+              <Route path="/login" element={<Login />} />
+            </Routes>
           </Provider>
-      </div>
+        </div>
       </ThemeProvider>
     </ColorModeContext.Provider>
   );

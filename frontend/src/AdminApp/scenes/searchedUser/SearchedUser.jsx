@@ -1,4 +1,3 @@
-
 import { DataGrid, GridToolbar } from "@mui/x-data-grid"
 import { tokens } from "../../theme"
 import { useTheme } from "@emotion/react"
@@ -6,22 +5,46 @@ import Header from "../../components/Header"
 import { Box } from "@mui/material"
 import axios from "../../axios"
 import { useEffect, useState } from "react"
-import { blockUser, getUsers } from "../../Constants/Constants"
+import { blockUser, getUser } from "../../Constants/Constants"
 import LockTwoToneIcon from '@mui/icons-material/LockTwoTone';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 
-const Team = () => {
+const SearchedUser = () => {
     const navigate = useNavigate();
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-    const [users, setUsers] = useState([])
-
+    const [users, setUsers] = useState()
+    const params = useParams();
     useEffect(() => {
         getUsersList();
     }, []);
-
+    const getUsersList = () => {
+        axios
+            .get(`${getUser}${params.id}`)
+            .then((response) => {
+                console.log('params', response.data)
+                setUsers([response.data]);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+    const EditUserBtn = (id, username) => {
+        Swal.fire({
+            title: `Are you sure to edit ${username}`,
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes",
+        }).then((result) => {
+            if (result.value) {
+                navigate(`/admin/form/${id}`)
+            }
+        })
+    }
     const blockUserBtn = (id, is_active, username) => {
         Swal.fire({
             title: is_active ? `Are you sure to block ${username}` : `Are you sure to UnBlock ${username}`,
@@ -41,6 +64,7 @@ const Team = () => {
                             is_active ? Swal.fire("Blocked!", `${res.data.name} has been blocked`, "success") :
                                 Swal.fire("UnBlocked!", `${res.data.name} has been Unblocked`, "success")
                         }
+                        navigate('/admin/team')
                     })
                     .catch((err) => {
                         Swal.fire(
@@ -51,31 +75,6 @@ const Team = () => {
             }
         });
     }
-    const EditUserBtn = (id, username) => {
-        Swal.fire({
-            title: `Are you sure to edit ${username}`,
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes",
-        }).then((result) => {
-            if (result.value) {
-                navigate(`/admin/form/${id}`)
-            }
-        })
-    }
-    const getUsersList = () => {
-        axios
-            .get(getUsers)
-            .then((response) => {
-                setUsers(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
-
     const columns = [
         // { field: "id", headerName: "ID" },
         {
@@ -171,15 +170,15 @@ const Team = () => {
                     borderTop: "none"
                 },
             }}>
-                <DataGrid
+                {users && <DataGrid
                     key={Math.random()}
                     rows={users}
                     columns={columns}
                     components={{ Toolbar: GridToolbar }}
-                />
+                />}
             </Box>
         </Box>
     )
 }
 
-export default Team;
+export default SearchedUser;

@@ -4,6 +4,7 @@ import adminReducer from "./adminReducer";
 const store = configureStore({
   reducer: {
     username: adminReducer,
+    searchUser: adminReducer,
   },
 });
 

@@ -7,9 +7,13 @@ const adminSlice = createSlice({
     changeAdmin: (state, action) => {
       return action.payload;
     },
+    changeSearchUser: (state, action) => {
+      return action.payload;
+    },
   },
 });
 
 export const { changeAdmin } = adminSlice.actions;
+export const { changeSearchUser } = adminSlice.actions;
 
 export default adminSlice.reducer;

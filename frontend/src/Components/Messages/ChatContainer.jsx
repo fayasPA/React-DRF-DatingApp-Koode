@@ -18,6 +18,7 @@ function ChatContainer() {
 
     // Websocket start
     const socket = new WebSocket(`wss://www.koode.live/ws/chat/${roomName}/`);
+    // const socket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${roomName}/`);
     socket.onopen = () => {
         console.log('WebSocket connection established.');
     };
