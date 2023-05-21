@@ -16,7 +16,7 @@ function Login() {
   useEffect(() => {
     const Token = localStorage.getItem("adminToken");
     if (Token) {
-      navigate("/");
+      navigate("/admin/");
     }
   }, [navigate]);
 

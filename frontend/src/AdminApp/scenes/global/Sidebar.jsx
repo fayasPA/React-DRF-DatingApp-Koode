@@ -38,7 +38,7 @@ export const Sidebar = () => {
     };
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
-    const Token = localStorage.getItem('adminToken').toUpperCase()
+    const Token = localStorage.getItem('adminToken')?.toUpperCase()
     const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('sm'));
     const [isCollapsed, setIsCollapsed] = useState(isSmallScreen);
     const [selected, setSelected] = useState('Dashboard')
