@@ -433,7 +433,6 @@ def editUsers(request, id):
     """
     data = request.data
     editUser = MyUser.objects.get(id=id)
-    print(editUser,"-----")
     editUser.first_name = data['firstName']
     editUser.last_name = data['lastName']
     editUser.age = data['age']
