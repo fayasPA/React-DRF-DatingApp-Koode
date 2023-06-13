@@ -56,8 +56,6 @@ function Matches() {
                     ))}
                 </ImageList>
             </div>
-
-
         </div>
     )
 }

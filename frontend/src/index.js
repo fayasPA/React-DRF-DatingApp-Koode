@@ -9,14 +9,14 @@ import AdminApp from './AdminApp/AdminApp';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-    <AuthProvider >
-      <Router>
-        <Routes >
+  <AuthProvider >
+    <Router>
+      <Routes >
         <Route path='/*' element={<App />} />
-            <Route path="/admin/*" element={<AdminApp />} />
-        </Routes>
-      </Router>
-    </AuthProvider >
+        <Route path="/admin/*" element={<AdminApp />} />
+      </Routes>
+    </Router>
+  </AuthProvider >
   // </React.StrictMode> 
 );
 

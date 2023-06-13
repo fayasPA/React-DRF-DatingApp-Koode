@@ -1,5 +1,4 @@
 FROM python:3.9.16-alpine
-# FROM python:3.8.10
 
 WORKDIR "/usr/app/backend"
 
@@ -12,5 +11,3 @@ COPY . .
 EXPOSE 8000
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
-

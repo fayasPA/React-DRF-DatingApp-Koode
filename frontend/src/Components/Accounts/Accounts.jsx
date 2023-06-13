@@ -1,5 +1,5 @@
 import Header from "../Header/Header";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -12,7 +12,7 @@ import ImageSection from "./ImageSection";
 
 
 function Accounts() {
-    
+
     const [expanded, setExpanded] = useState(false);
 
     const handleChange = (panel) => (event, isExpanded) => {
@@ -28,51 +28,51 @@ function Accounts() {
                 < ImageSection />
                 {/* Accordion Starts */}
                 <div className="md:px-10 pb-5">
-                <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1bh-content"
-                        id="panel1bh-header"
-                    >
-                        <Typography variant="h4" sx={{ width: '33%', flexShrink: 0 }}>
-                            About Me
-                        </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        < AboutSection handleChange={handleChange("panel1")}/>
-                    </AccordionDetails>
-                </Accordion>
+                    <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1bh-content"
+                            id="panel1bh-header"
+                        >
+                            <Typography variant="h4" sx={{ width: '33%', flexShrink: 0 }}>
+                                About Me
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            < AboutSection handleChange={handleChange("panel1")} />
+                        </AccordionDetails>
+                    </Accordion>
                 </div>
-                
+
                 <div className="md:px-10 pb-5">
-                <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel2bh-content"
-                        id="panel2bh-header"
-                    >
-                        <Typography variant="h4" sx={{ width: '33%', flexShrink: 0 }}>My Work & Education</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <WorkEduSection handleChange={handleChange("panel2")}/>
-                    </AccordionDetails>
-                </Accordion>
+                    <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel2bh-content"
+                            id="panel2bh-header"
+                        >
+                            <Typography variant="h4" sx={{ width: '33%', flexShrink: 0 }}>My Work & Education</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <WorkEduSection handleChange={handleChange("panel2")} />
+                        </AccordionDetails>
+                    </Accordion>
                 </div>
                 <div className="md:px-10 pb-5">
-                <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-                    <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel3bh-content"
-                        id="panel3bh-header"
-                    >
-                        <Typography variant="h4" sx={{ width: '33%', flexShrink: 0 }}>
-                            My Zodiac
-                        </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <ZodiacSection handleChange={handleChange('panel3')} />
-                    </AccordionDetails>
-                </Accordion>
+                    <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel3bh-content"
+                            id="panel3bh-header"
+                        >
+                            <Typography variant="h4" sx={{ width: '33%', flexShrink: 0 }}>
+                                My Zodiac
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <ZodiacSection handleChange={handleChange('panel3')} />
+                        </AccordionDetails>
+                    </Accordion>
                 </div>
             </div>
 

@@ -1,7 +1,7 @@
 import Accounts from "../Components/Accounts/Accounts";
 
 function AccountsPage() {
-    return(
+    return (
         <div>
             < Accounts />
         </div>

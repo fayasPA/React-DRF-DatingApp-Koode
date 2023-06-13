@@ -44,7 +44,6 @@ const ZodiacSection = (props) => {
           value={zodiacData.zodiac}
           sx={{
             m: "0px 20px 10px 10px ", boxShadow: 10
-            // borderRadius: 5,
           }}
         />
         <Box display="flex" justifyContent="space-evenly">

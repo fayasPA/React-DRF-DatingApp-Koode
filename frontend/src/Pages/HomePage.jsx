@@ -1,8 +1,8 @@
 import Home from "../Components/Home/Home"
 
 function HomePage() {
-    
-    return(
+
+    return (
         <div>
             < Home />
         </div>

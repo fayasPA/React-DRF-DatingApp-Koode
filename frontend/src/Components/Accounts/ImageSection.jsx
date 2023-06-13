@@ -1,7 +1,6 @@
 import * as React from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import AddIcon from '@mui/icons-material/Add';
 
 import { TextField, useMediaQuery } from "@mui/material"
 import { addImage1, profileDetails, getUser, baseimageUrl } from "../../Constants/Constants"
@@ -12,9 +11,9 @@ export default function ImageSection() {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('md'));
 
   const Token = localStorage.getItem('user_id')
-  const [images,setImages] = useState([])
-  const [imageNo, setImageNo] = useState([0,1,2,3])
-  useEffect( () => {
+  const [images, setImages] = useState([])
+  const [imageNo, setImageNo] = useState([0, 1, 2, 3])
+  useEffect(() => {
     // user details
     axios.get(`${getUser}${Token}`).then((response) => {
       setImages((prevImages) => [...prevImages, response.data.image])
@@ -23,13 +22,13 @@ export default function ImageSection() {
   useEffect(() => {
     // User Profile details
     axios.get(`${profileDetails}${Token}`).then((response) => {
-      if (response.data.image1){
+      if (response.data.image1) {
         setImages((prevImages) => [...prevImages, response.data.image1])
       }
-      if (response.data.image2){
+      if (response.data.image2) {
         setImages((prevImages) => [...prevImages, response.data.image2])
       }
-      if (response.data.image3){
+      if (response.data.image3) {
         setImages((prevImages) => [...prevImages, response.data.image3])
       }
     })
@@ -40,7 +39,7 @@ export default function ImageSection() {
   };
   const imageSubmit = (e) => {
     e.preventDefault()
-    console.log(e.target.files[0],"IMAGE");
+    console.log(e.target.files[0], "IMAGE");
     const formData = new FormData();
     formData.append("image1", e.target.files[0]);
     axios
@@ -53,19 +52,18 @@ export default function ImageSection() {
     return (
       <div className='h-full flex justify-center place-items-center'>
         <form >
-        <TextField onChange={imageChange} id="outlined-basic" type="file" />
+          <TextField onChange={imageChange} id="outlined-basic" type="file" />
         </form>
       </div>
     )
   }
   return (
     <div className='flex justify-center pb-10'>
-      <ImageList sx={isSmallScreen ? { width: 300, height: 300, borderTopLeftRadius: 100}: { width: 400, height: 300, borderTopLeftRadius: 100}} cols={isSmallScreen ? 1: 2} rowHeight={300}> 
+      <ImageList sx={isSmallScreen ? { width: 300, height: 300, borderTopLeftRadius: 100 } : { width: 400, height: 300, borderTopLeftRadius: 100 }} cols={isSmallScreen ? 1 : 2} rowHeight={300}>
         {imageNo?.map((item, index) => (
           <ImageListItem key={index}>
             {images[item] ? <img className=''
               src={`${baseimageUrl}${images[item]}`}
-              // srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
               alt="profile images"
               loading="lazy"
             /> : (alternateInput(item))}

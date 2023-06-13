@@ -10,9 +10,6 @@ from django.utils import timezone
 import datetime
 from django.dispatch import Signal
 from .signals import match_created
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
-from app.api.consumers import ChatConsumer
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -102,6 +99,7 @@ def getUser(request, id):
     serializer = MyUserSerializer(currUser, many=False)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 def userProfiles(request, id):
     """
@@ -116,6 +114,7 @@ def userProfiles(request, id):
     user_profile = UserProfile.objects.get(user=user.id)
     serializer = UserProfileDetailsSerializer(user_profile)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -142,6 +141,7 @@ def getAppUsers(request, id):
         user_data['user_profile'] = user_profile_data
     return Response(serializer.data)
 
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def filterBy(request, id):
@@ -152,12 +152,13 @@ def filterBy(request, id):
     filteredUsers: List of users in the app filtered by the data passed from the frontend.
     """
     data = request.data
-    print(data,'-----',id)
+    print(data, '-----', id)
     if data['filter'] != 'All':
-        filteredUsers = MyUser.objects.filter(Q(gender=data['filter']) | Q(id=id)).exclude(Q(id=id) | Q(is_superuser=True))
+        filteredUsers = MyUser.objects.filter(Q(gender=data['filter']) | Q(
+            id=id)).exclude(Q(id=id) | Q(is_superuser=True))
     else:
         filteredUsers = MyUser.objects.all().exclude(Q(id=id) | Q(is_superuser=True))
-    print(filteredUsers) 
+    print(filteredUsers)
     serializer = MyUserSerializer(filteredUsers, many=True)
     for user_data in serializer.data:
         user_id = user_data['id']
@@ -165,6 +166,7 @@ def filterBy(request, id):
         user_profile_data = UserProfileSerializer(user_profile).data
         user_data['user_profile'] = user_profile_data
     return Response(serializer.data)
+
 
 @api_view(['POST'])
 def searchUsers(request):
@@ -176,11 +178,13 @@ def searchUsers(request):
     searchList: Serialized data of the result.
     """
     data = request.data
-    print(data['searchItem'],'---------')
-    searcheddUsers = MyUser.objects.filter(username__icontains=data['searchItem']).exclude(Q(is_superuser=True)).order_by('username')
+    print(data['searchItem'], '---------')
+    searcheddUsers = MyUser.objects.filter(username__icontains=data['searchItem']).exclude(
+        Q(is_superuser=True)).order_by('username')
     searchList = MyUserSerializer(searcheddUsers, many=True)
     print(searcheddUsers)
     return Response(searchList.data)
+
 
 @api_view(['GET'])
 def profileDetails(request, id):
@@ -300,19 +304,24 @@ def userNotifications(request, id):
     This method is used to get notifications got for the logged in user.
     parameter-id: id of the current logged in user.
 
-    notifications : used to get the notification from the database.
+    notifications : used to get the unread notification from the database.
+    oldNotifications : used to get the read notification from the database.
     """
     notifications = Notification.objects.filter(
         receiver_id=id, is_read=False).order_by('-timestamp')
+    oldNotifications = Notification.objects.filter(
+        receiver_id=id, is_read=True).order_by('-timestamp')
+    oldNotserializer = NotificationSerializer(oldNotifications, many=True)
     if len(notifications) == 0:
-        return Response()
+        data = {'old_notifications': oldNotserializer.data}
+        return Response(data)
     serializer = NotificationSerializer(notifications, many=True)
-    for notification in serializer.data:
-        sender_id = notification['sender']
-        user = MyUser.objects.get(id=sender_id)
-        user_data = MyUserSerializer(user).data
-        notification['sender'] = user_data
-    return Response(serializer.data)
+    data = {
+        'notifications': serializer.data,
+        'old_notifications': oldNotserializer.data
+    }
+    notifications.update(is_read=True)
+    return Response(data)
 
 
 class MatchView(APIView):
@@ -358,7 +367,8 @@ class MatchView(APIView):
         matches = Match.objects.filter(user1_id=id)
         print(matches)
         serializer = MatchSerializer(matches, many=True)
-        return Response(serializer.data) 
+        return Response(serializer.data)
+
 
 @api_view(['GET'])
 def userChats(request, id):
@@ -387,6 +397,7 @@ def getUserMessages(request, id):
     messages = Message.objects.filter(chat_id=id).order_by('created_at')
     serializer = MessageSerializer(messages, many=True)
     return Response(serializer.data)
+
 
 # ADMIN SIDE
 
@@ -421,6 +432,7 @@ def userBlock(request, id):
     print(name, "fayas")
     return Response({'name': name})
 
+
 @api_view(['POST'])
 def editUsers(request, id):
     """
@@ -448,6 +460,7 @@ def userDelete(request, id):
     user.delete()
     return Response({'name': name})
 
+
 @api_view(['GET'])
 def statistics(request):
     user = MyUser.objects.all().exclude(is_superuser=True)
@@ -460,7 +473,7 @@ def statistics(request):
     data = {
         # 'user_data': userSerializer.data,
         # 'chat_data': chatSerializer.data,
-        "user_count" : user_count,
-        "chat_count" : chat_count / 2
+        "user_count": user_count,
+        "chat_count": chat_count / 2
     }
     return Response(data)

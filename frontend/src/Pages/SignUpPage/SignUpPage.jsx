@@ -4,15 +4,15 @@ import SignUp from "../../Components/SignUp/SignUp"
 import AuthContext from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-function SignUpPage(){
+function SignUpPage() {
     const _user = useContext(AuthContext)
     const navigate = useNavigate();
     useEffect(() => {
-            if (_user.user){
-                navigate("/")
-            }
-      }, [_user],navigate)
-    return(
+        if (_user.user) {
+            navigate("/")
+        }
+    }, [_user], navigate)
+    return (
         <div>
             <NavBar />
             <SignUp />

@@ -5,48 +5,54 @@ import { Box, Button, Hidden, IconButton, Typography, useMediaQuery, useTheme } 
 import { Link, useNavigate } from 'react-router-dom';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined'
-import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined'
-import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined'
-import PieChartOutlinedIcon from '@mui/icons-material/PieChartOutlined'
-import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined'
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined'
-import MapOutlinedIcon from '@mui/icons-material/MapOutlined'
 import LogoutIcon from '@mui/icons-material/Logout';
 import { tokens } from '../../theme';
 import AuthContext from '../../Context/AuthContext';
-import logo from "../../Assets/homepage_bg.jpg"
 import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
+import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 import axios from '../../axios';
 import { baseimageUrl, getUser } from '../../Constants/Constants';
+import SocketContext from '../../Context/SocketContext';
 
-
-const Item = ({ title, to, icon, selected, setSelected }) => {
+const Item = ({ title, to, icon, selected, setSelected, notMessage, setNot_message }) => {
     const theme = useTheme()
     const colors = tokens(theme.palette.mode)
 
     return (
         <MenuItem active={selected === title}
-            style={{ color: colors.grey[100] }}
-            onClick={() => setSelected(title)}
+            style={(notMessage) ? { color: 'red' } : { color: colors.grey[100] }}
+            onClick={() => {
+                setSelected(title)
+                if (to === 'notification') {
+                    setNot_message(null); // Set not_message to null when clicking on the Notifications menu item
+                }
+            }}
             icon={icon}
         >
-            <Typography>{title}</Typography>
+            <div className='flex items-center'>{notMessage && (
+                <Box borderRadius='50%' style={{ padding: '1px', color: 'red', marginRight: '3px' }} fontSize={20} >{notMessage}</Box>
+            )}
+                <Typography>{title}</Typography>
+            </div>
             <Link to={to} />
         </MenuItem>
     )
 }
 
-
 export const Sidebar = () => {
+
+    const notification_socket = useContext(SocketContext)
+    const [not_message, setNot_message] = useState(null);
+    const Token = localStorage.getItem('user_id')
     const navigate = useNavigate();
     const logoutHandle = useContext(AuthContext)
-    const Token = localStorage.getItem('user_id')
     useEffect(() => {
-      getFiles()
+        getFiles()
     }, [])
-    const [userDetails,setUserDetails] = useState()
-    const getFiles = () =>{
+    const [userDetails, setUserDetails] = useState()
+    const getFiles = () => {
         axios.get(`${getUser}${Token}`).then((response) => {
             setUserDetails(response.data)
         })
@@ -59,8 +65,22 @@ export const Sidebar = () => {
     const toAccountsPage = () => {
         navigate('/accounts')
     };
+
+    useEffect(() => {
+        if (notification_socket) {
+            notification_socket.onmessage = (event) => {
+                const likemessage = JSON.parse(event.data, 'SOCKET ON MESSAGE');
+                console.log('Received notification@sidebar:', likemessage.message);
+                if (likemessage.message) {
+                    setNot_message(likemessage.message);
+                    console.log('FAYAS@token correct');
+                }
+            };
+        }
+    }, [notification_socket]);
+
     return (
-        <Box 
+        <Box
             sx={{
                 height: '100vh',
                 "& .pro-sidebar-inner": {
@@ -97,7 +117,7 @@ export const Sidebar = () => {
                                 alignItems="center"
                                 ml="15px"
                             >
-                                <IconButton color= {colors.grey[100]} onClick={() => setIsCollapsed(!isCollapsed)}>
+                                <IconButton color={colors.grey[100]} onClick={() => setIsCollapsed(!isCollapsed)}>
                                     <MenuOutlinedIcon />
                                 </IconButton>
 
@@ -112,12 +132,12 @@ export const Sidebar = () => {
                                 />
                             </Box>
                             <Box textAlign="center">
-                                <Typography onClick={toAccountsPage} variant='h2'  color={colors.grey[100]} fontWeight="bold"
-                                    sx={{ m: "10px 0 0 ", cursor: "pointer"}}
+                                <Typography onClick={toAccountsPage} variant='h2' color={colors.grey[100]} fontWeight="bold"
+                                    sx={{ m: "10px 0 0 ", cursor: "pointer" }}
                                 > {userDetails && userDetails.username}</Typography>
                             </Box>
                         </Box>
-                        
+
                     )}
                     <Box paddingLeft={isCollapsed ? undefined : "10%"}>
                         {isCollapsed && (
@@ -129,30 +149,32 @@ export const Sidebar = () => {
                                 selected={selected}
                                 setSelected={setSelected}
                             />)}
-                            <Item title="Home"
+                        <Item title="Home"
                             to=""
                             icon={<HomeOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
-                            />
-                            <Item title="Matches"
+                        />
+                        <Item title="Matches"
                             to="matches"
                             icon={<PeopleOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
-                            <Item title="Messages"
+                        <Item title="Messages"
                             to="messages"
                             icon={<ChatOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
-                            />
-                            <Item title="Notifications"
+                        />
+                        <Item title="Notifications"
                             to="notification"
-                            icon={<NotificationsActiveOutlinedIcon />}
+                            icon={not_message ? <NotificationAddIcon /> : <NotificationsActiveOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
-                            />
+                            notMessage={not_message}
+                            setNot_message={setNot_message}
+                        />
 
                         <Box m={!isCollapsed ? undefined : "10px 0 0 -10px"} >
                             <Button color='inherit' onClick={logoutHandle.logOutUser}  >

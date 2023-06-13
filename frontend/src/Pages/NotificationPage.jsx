@@ -1,7 +1,7 @@
 import Notification from "../Components/Notification/Notification";
 
 function NotificationPage() {
-    return(
+    return (
         <div>
             < Notification />
         </div>

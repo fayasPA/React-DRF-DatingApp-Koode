@@ -19,18 +19,18 @@ function App() {
       <ThemeProvider theme={theme} >
         <CssBaseline />
         <div className="App">
-            <Routes>
-              <Route element={<PrivateRoutes />} >
-                <Route path="/" element={<HomePage />} exact/>
-                  <Route path="/accounts" element={<AccountsPage />} />
-                  <Route path="/useraccounts/:id" element={<UserAccountsPage />} />
-                <Route path="/matches" element={<MatchesPage />} />
-                <Route path="/messages" element={<MessagePage />} />
-                <Route path="/notification" element={<NotificationPage />} />
-              </Route>
-              < Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={< SignUpPage />} />
-            </Routes>
+          <Routes>
+            <Route element={<PrivateRoutes />} >
+              <Route path="/" element={<HomePage />} exact />
+              <Route path="/accounts" element={<AccountsPage />} />
+              <Route path="/useraccounts/:id" element={<UserAccountsPage />} />
+              <Route path="/matches" element={<MatchesPage />} />
+              <Route path="/messages" element={<MessagePage />} />
+              <Route path="/notification" element={<NotificationPage />} />
+            </Route>
+            < Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={< SignUpPage />} />
+          </Routes>
         </div>
       </ThemeProvider>
     </ColorModeContext.Provider>

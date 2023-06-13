@@ -1,16 +1,15 @@
 import { useContext, useEffect, useState } from "react"
 import { FaHandsHelping, FaSearch } from "react-icons/fa"
-import { TbFilter } from "react-icons/tb"
 import { Link, useNavigate } from "react-router-dom"
 import axios from "../../axios"
 import { baseimageUrl, filterBy, getAppUsers, searchUsers, userLiked } from "../../Constants/Constants"
 import { RxCross2 } from "react-icons/rx"
-
 import { BsCheckLg } from "react-icons/bs"
 import WorkIcon from '@mui/icons-material/Work';
 import SchoolIcon from '@mui/icons-material/School';
 import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 import AuthContext from "../../Context/AuthContext"
+import SocketContext from "../../Context/SocketContext"
 
 function Home() {
     const navigate = useNavigate()
@@ -18,14 +17,15 @@ function Home() {
     const authTokens = useContext(AuthContext)
     const [appUsers, setAppUsers] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0);
+    const notification_socket = useContext(SocketContext)
     const getOtherUsersInfo = () => {
         if (Token) {
-            console.log(authTokens.authTokens.access,'access')
-            axios.get(`${getAppUsers}${Token}`,{
+            console.log(authTokens.authTokens.access, 'access')
+            axios.get(`${getAppUsers}${Token}`, {
                 headers: {
-                  Authorization: 'Bearer ' + String(authTokens.authTokens.access)
+                    Authorization: 'Bearer ' + String(authTokens.authTokens.access)
                 }
-              }).then((response) => {
+            }).then((response) => {
                 setAppUsers(response.data)
             })
         }
@@ -43,6 +43,7 @@ function Home() {
         axios.post(userLiked, body).then((response) => {
             console.log(response.data, "User has liked")
         })
+        notification_socket?.send(JSON.stringify({ "body": body }));
         // Increment the current index to move to the next user
         { appUsers[currentIndex + 1] && setCurrentIndex(currentIndex + 1) }
     };
@@ -60,16 +61,15 @@ function Home() {
     const [isOpen, setIsOpen] = useState(false);
     function handleOptionChange(e) {
         setSelectedOption(e.target.value);
-        console.log(e.target.value)
         const body = {
             'filter': e.target.value,
         }
         axios
-            .post(`${filterBy}${Token}`, body,{
+            .post(`${filterBy}${Token}`, body, {
                 headers: {
-                  Authorization: 'Bearer ' + String(authTokens.authTokens.access)
+                    Authorization: 'Bearer ' + String(authTokens.authTokens.access)
                 }
-              })
+            })
             .then((response) => {
                 setAppUsers(response.data)
                 setCurrentIndex(0)
@@ -84,11 +84,11 @@ function Home() {
             searchItem: value
         }
         if (value) {
-            axios.post(searchUsers, body,{
+            axios.post(searchUsers, body, {
                 headers: {
-                  Authorization: 'Bearer ' + String(authTokens.authTokens.access)
+                    Authorization: 'Bearer ' + String(authTokens.authTokens.access)
                 }
-              }).then((response) => {
+            }).then((response) => {
                 setSearchResult(response.data)
             })
         }

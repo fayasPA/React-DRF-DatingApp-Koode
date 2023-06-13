@@ -69,7 +69,6 @@ function SignUp() {
     return (
         <div>
             {/* Section Design Block */}
-            {/* <div className="p-10 flex justify-center items-center bg-gradient-to-r from-white to-[#0d2569] h-screen"> */}
             <section className="bg-gradient-to-r from-white to-[#0d2569] w-[100%] p-3  mx-auto text-center flex flex-col justify-center items-center">
                 {/* Background Image */}
                 <div className="bg-[#6b6565] pt-3 pl-10 pr-10 bg-opacity-25">
@@ -170,8 +169,6 @@ function SignUp() {
                                 <label className="flex uppercase tracking-wide text-gray-900 text-lg font-bold " htmlFor="grid-username">
                                     Upload your image
                                 </label>
-                                {/* <input {...register("username")}  className="appearance-none block w-full bg-gray-200 text-gray-900 border border-gray-200 rounded py-3 px-4  leading-tight focus:outline-none focus:bg-white" id="grid-username" type="text" placeholder="Jane" />
-                      <p className=" text-red-500">{errors.username?.message}</p> */}
                                 <input onChange={handleImageChange} {...register("image")} type="file" className="appearance-none block w-full bg-gray-200 text-gray-900 border border-gray-200 rounded py-3 px-4  leading-tight focus:outline-none focus:bg-white" />
                                 <p className=" text-red-500">{errors.image && "fayas"}</p>
                             </div>

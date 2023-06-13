@@ -8,12 +8,12 @@ function LoginPage() {
     const _user = useContext(AuthContext)
     const navigate = useNavigate();
     useEffect(() => {
-            if (_user.user){
-                navigate("/")
-            }
-      }, [_user],navigate)
-    
-      return(
+        if (_user.user) {
+            navigate("/")
+        }
+    }, [_user], navigate)
+
+    return (
         <div>
             <NavBar />
             <Login />

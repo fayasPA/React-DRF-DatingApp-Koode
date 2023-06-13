@@ -4,9 +4,12 @@ import axios from "../../axios";
 import { Card, CardContent, CardMedia, Fab, TextField, Typography } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import moment from "moment";
+import { HiVideoCamera } from "react-icons/hi"
+import { BiPhoneCall } from "react-icons/bi"
 
 function ChatContainer() {
 
+    const [msgSocket, setMsgSocket] = useState();
     const Token = localStorage.getItem('user_id')
     const formatTimestamp = (timestamp) => {
         const formattedTimestamp = moment(timestamp).fromNow();
@@ -16,23 +19,33 @@ function ChatContainer() {
     const [messages, setMessages] = useState([]);
     const roomName = currMessaging
 
-    // Websocket start
-    const socket = new WebSocket(`wss://www.koode.live/ws/chat/${roomName}/`);
-    // const socket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${roomName}/`);
-    socket.onopen = () => {
-        console.log('WebSocket connection established.');
-    };
+    useEffect(() => {
+        // Websocket start
+        if (roomName) {
+            const socket = new WebSocket(`wss://www.koode.live/ws/chat/${roomName}/`);
+            // const socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomName}/`);
+            socket.onopen = () => {
+                console.log('WebSocket connection established.');
+            };
 
-    socket.onmessage = event => {
-        const message = JSON.parse(event.data, "socket on message");
-        getMessages(currMessaging);
-        console.log('Received message:', message);
-    };
+            socket.onmessage = event => {
+                const message = JSON.parse(event.data, "socket on message");
+                getMessages(currMessaging);
+                console.log('Received message:', message);
+            };
 
-    socket.onclose = () => {
-        console.log('WebSocket connection closed.');
-    }
-    // Websocket ends
+            socket.onclose = () => {
+                console.log('WebSocket connection closed.');
+            }
+            // Websocket ends
+            setMsgSocket(socket)
+
+            return () => {
+                socket.close();
+            };
+        }
+
+    }, [currMessaging])
 
     const getMessages = (id) => {
         setCurrMessaging(id)
@@ -78,11 +91,10 @@ function ChatContainer() {
         }
         {
             e.target.content.value &&
-                socket.send(JSON.stringify(body))
+                msgSocket.send(JSON.stringify(body))
             e.target.content.value = null;
             e.target.content.focus();
         }
-
     }
 
     const Item = ({ title, id, icon }) => {
@@ -131,7 +143,16 @@ function ChatContainer() {
                 ))}
             </div>
             {currMessaging && (
-                <div className="md:w-3/4 h-[100%] ">
+                <div className="md:w-3/4 h-[100%]">
+                    <div className="flex justify-between">
+                        <div className="w-1/2">
+                            <img src="" alt="fyaassfdds" />
+                        </div>
+                        <div className="w-1/2 flex justify-end">
+                            <p className="mx-2"><BiPhoneCall size={20} /></p>
+                            <p className="mx-2"><HiVideoCamera size={20} /></p>
+                        </div>
+                    </div>
                     {messages ? (<div ref={messageContainer} className="h-[80%] border-b-2 pt-5 max-h-[80%] overflow-y-scroll">
                         {messages.map(message => (
                             message.sender == Token ? (

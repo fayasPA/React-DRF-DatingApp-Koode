@@ -1,7 +1,7 @@
 import Messages from "../Components/Messages/Messages";
 
 function MessagePage() {
-    return(
+    return (
         <div>
             < Messages />
         </div>

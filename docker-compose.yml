@@ -24,6 +24,7 @@ services:
       - mediafiles:/usr/app/backend/static
     depends_on:
       - db
+      - redis
   nginx:
     restart: unless-stopped
     build: ./frontend

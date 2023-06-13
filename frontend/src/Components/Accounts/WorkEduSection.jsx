@@ -46,7 +46,6 @@ const WorkEduSection = (props) => {
           value={workEduData.education}
           sx={{
             m: "0px 20px 10px 10px ", boxShadow: 5
-            // borderRadius: 5,
           }}
         />
         <TextField
@@ -57,7 +56,6 @@ const WorkEduSection = (props) => {
           value={workEduData.job}
           sx={{
             m: "10px 10px 10px 10px ", boxShadow: 5
-            // borderRadius: 5,
           }}
         />
         <Box display="flex" justifyContent="space-evenly">
@@ -71,7 +69,7 @@ const WorkEduSection = (props) => {
           <Button
             variant="contained"
             color="primary"
-            onClick={props.handleChange} 
+            onClick={props.handleChange}
           >
             Cancel
           </Button>

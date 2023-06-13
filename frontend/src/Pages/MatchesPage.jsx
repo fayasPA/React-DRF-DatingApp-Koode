@@ -1,7 +1,7 @@
 import Matches from "../Components/Matches/Matches";
 
 function MatchesPage() {
-    return(
+    return (
         <div>
             < Matches />
         </div>

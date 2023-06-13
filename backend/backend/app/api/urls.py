@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import (
 )
 
 urlpatterns = [
-    path('',views.getRoutes),
+    path('', views.getRoutes),
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path("signup/", views.signup, name="signup"),
@@ -25,10 +25,11 @@ urlpatterns = [
     path("userLiked/", views.userLiked, name="userLiked"),
     path("userMatches/", views.MatchView.as_view(), name="userMatches"),
     path("getMatches/<int:id>", views.MatchView.as_view(), name="getMatches"),
-    path("userNotifications/<int:id>", views.userNotifications, name="userNotifications"),
+    path("userNotifications/<int:id>",
+         views.userNotifications, name="userNotifications"),
     path("userChats/<int:id>", views.userChats, name="userChats"),
     path("getUserMessages/<int:id>", views.getUserMessages, name="getUserMessages"),
-    
+
     # Admin url's
     path("admin_login", views.admin_login.as_view(), name="admin_login"),
     path("getUsers", views.getUsers, name="getUsers"),
