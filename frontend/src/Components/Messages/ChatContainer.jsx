@@ -4,8 +4,8 @@ import axios from "../../axios";
 import { Card, CardContent, CardMedia, Fab, TextField, Typography } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import moment from "moment";
-import { HiVideoCamera } from "react-icons/hi"
-import { BiPhoneCall } from "react-icons/bi"
+// import { HiVideoCamera } from "react-icons/hi"
+// import { BiPhoneCall } from "react-icons/bi"
 
 function ChatContainer() {
 
@@ -16,6 +16,7 @@ function ChatContainer() {
         return formattedTimestamp
     }
     const [currMessaging, setCurrMessaging] = useState(null);
+    const [currMessagingName, setCurrMessagingName] = useState(null);
     const [messages, setMessages] = useState([]);
     const roomName = currMessaging
 
@@ -101,6 +102,7 @@ function ChatContainer() {
         return (
             <Card onClick={() => {
                 getMessages(id);
+                setCurrMessagingName(title)
             }}
                 sx={{ cursor: 'pointer', ":hover": "black", mb: '1px', display: 'flex', borderBottom: "20px", alignItems: 'center', justifyContent: 'start', pl: "5px", py: "5px" }}>
                 <CardMedia
@@ -144,14 +146,8 @@ function ChatContainer() {
             </div>
             {currMessaging && (
                 <div className="md:w-3/4 h-[100%]">
-                    <div className="flex justify-between">
-                        <div className="w-1/2">
-                            <img src="" alt="fyaassfdds" />
-                        </div>
-                        <div className="w-1/2 flex justify-end">
-                            <p className="mx-2"><BiPhoneCall size={20} /></p>
-                            <p className="mx-2"><HiVideoCamera size={20} /></p>
-                        </div>
+                    <div className="flex p-2 bg-[#c6c9eb] justify-between border-b-4">
+                        {currMessagingName && <Typography fontSize={20} >{currMessagingName}</Typography>}
                     </div>
                     {messages ? (<div ref={messageContainer} className="h-[80%] border-b-2 pt-5 max-h-[80%] overflow-y-scroll">
                         {messages.map(message => (
