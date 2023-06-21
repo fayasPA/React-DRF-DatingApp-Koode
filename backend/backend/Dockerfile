@@ -2,7 +2,7 @@ FROM python:3.9.16-alpine
 
 WORKDIR "/usr/app/backend"
 
-COPY requirements.txt requirements.txt
+COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 

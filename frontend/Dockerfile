@@ -1,8 +1,7 @@
 FROM node:14.21.3-alpine as builder
 WORKDIR '/usr/app/frontend'
 
-COPY . .
-COPY . .
+COPY package.json .
 
 RUN npm install
 
