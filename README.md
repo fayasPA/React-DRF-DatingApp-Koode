@@ -32,7 +32,7 @@ if cannot be connected to digital ocean server:
 // use pg_dump :
     pg_dump -U <username> -h localhost dating_app > dating_app_backup.sql
 // after running yml file :
-    docker cp dating_app_backup.sql react-drf-datingapp-koode_db_1:/tmp/           
+    docker cp backup.sql react-drf-datingapp-koode_db_1:/tmp/           
 // above code is to transfer any file into the docker container //
     docker exec -it react-drf-datingapp-koode_db_1 bash
     psql -U postgres -d dating_app -f /tmp/dating_app_backup.sql
