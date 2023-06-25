@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { baseimageUrl, userChats, getUserMessages } from "../../Constants/Constants";
+import { baseimageUrl, userChats, getUserMessages, baseWSurl } from "../../Constants/Constants";
 import axios from "../../axios";
 import { Card, CardContent, CardMedia, Fab, TextField, Typography } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
@@ -23,8 +23,7 @@ function ChatContainer() {
     useEffect(() => {
         // Websocket start
         if (roomName) {
-            const socket = new WebSocket(`wss://www.koode.live/ws/chat/${roomName}/`);
-            // const socket = new WebSocket(`ws://localhost:8000/ws/chat/${roomName}/`);
+            const socket = new WebSocket(`${baseWSurl}chat/${roomName}/`);
             socket.onopen = () => {
                 console.log('WebSocket connection established.');
             };

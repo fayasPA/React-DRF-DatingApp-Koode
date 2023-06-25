@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom"
 import Sidebar from "../Components/Sidebar/Sidebar"
 import AuthContext from "../Context/AuthContext"
 import SocketContext from "../Context/SocketContext"
+import { baseWSurl } from "../Constants/Constants"
 
 const PrivateRoutes = () => {
     const navigate = useNavigate();
@@ -18,8 +19,7 @@ const PrivateRoutes = () => {
     const [not_socket, setNot_socket] = useState(null);
     useEffect(() => {
         if (Token) {
-            const notSocket = new WebSocket(`wss://www.koode.live/ws/notification/${Token}/`);
-            // const notSocket = new WebSocket(`ws://localhost:8000/ws/notification/${Token}/`);
+            const notSocket = new WebSocket(`${baseWSurl}notification/${Token}/`);
             notSocket.onopen = () => {
                 console.log('Notification WebSocket connection established.');
             };

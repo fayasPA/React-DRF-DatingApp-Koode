@@ -2,6 +2,8 @@
 export const baseUrl = "https://www.koode.live/api/";
 // export const baseimageUrl = "http://127.0.0.1:8000/static";
 export const baseimageUrl = "https://www.koode.live/media";
+// export const baseWSurl = "ws://localhost:8000/ws/"
+export const baseWSurl = "wss://www.koode.live/ws/"
 
 export const verifyToken = "verifyToken";
 export const signup = "signup/";
