@@ -1,9 +1,10 @@
 import { useContext } from "react"
-import Typed from "react-typed"
+import {Link} from "react-router-dom"
 import AuthContext from "../../Context/AuthContext"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { FaHandsHelping } from "react-icons/fa";
 
 const schema = yup.object().shape({
     username: yup.string().required(),
@@ -17,29 +18,59 @@ function Login() {
     })
 
     return (
-        <div className="p-10 flex justify-center items-center bg-gradient-to-r from-white to-[#0d2569] h-screen">
-            <div className="bg-white bg-opacity-20">
-                <div className="flex justify-center">
-                    <Typed className="pt-5 font-bold md:text-2xl text-lg  pl-2 " strings={['What are you waiting for..']} loop typeSpeed={80} backSpeed={140} />
+        <div className="flex h-screen">
+            <div className="hidden md:flex w-1/2">
+                <div className="text-4xl font-extrabold flex h-full w-full justify-center items-center">
+                    <div className="mr-2 mb-1 rounded-lg border-4 flex justify-center items-center bg-white">
+                        <FaHandsHelping size={30} className="text-black rounded-lg " />
+                    </div>
+                    <h1>KOODE</h1>
                 </div>
-                <div className="p-10">
-                    <form action="" onSubmit={handleSubmit(loginUser.loginUser)}>
-                        <div className="w-full px-3 mb-6 md:mb-0">
-                            <label className="block tracking-wide text-gray-900 text-xl font-bold mb-2" htmlFor="grid-first-name">
-                                Username
-                            </label>
-                            <input {...register("username")} className="appearance-none block w-full bg-gray-200 text-gray-900 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="Jane" />
+            </div>
+            <div className="flex-1 w-100 bg-black">
+                <div className="flex md:hidden pt-4 text-[#6b5b95]">
+                    <div className="text-4xl font-extrabold flex h-full w-full justify-center items-center">
+                        <div className="mr-2 mb-1 rounded-lg border-4 border-[#6b5b95] flex justify-center items-center bg-white">
+                            <FaHandsHelping size={30} className="text-black rounded-lg " />
+                        </div>
+                        <h1>KOODE</h1>
+                    </div>
+                </div>
+                <div className="w-full flex justify-end p-5">
+                    <button className="bg-gray-500 flex text-gray-100 w-1/3 rounded-full tracking-wide
+                                font-semibold font-display focus:outline-none focus:shadow-outline
+                                shadow-lg">
+                        <h1 className="rounded-l-full py-2 bg-[#6b5b95] w-1/2">login</h1>
+                        <Link className="w-1/2 py-2" to="/signup">
+                        <h1 >signup</h1>
+                        </Link>
+                    </button>
+                </div>
+                <div className=" text-4xl font-display font-semibold lg:text-left xl:text-5xl
+                    xl:text-bold text-white w-full flex justify-start p-5 ">
+                    <h1 className="border-b-2 border-[#6b5b95]">Login</h1>
+                </div>
+                <div className="mt-11">
+                    <form className="pl-10" onSubmit={handleSubmit(loginUser.loginUser)} action="">
+                        <div className="text-white mb-10">
+                            <label className="text-sm font-bold tracking-wide block" htmlFor="username">USERNAME</label>
+                            <input {...register("username")} className="p-2 border-b-2 border-gray-600 bg-transparent w-[80%] outline-none" type="text" placeholder="Enter your username" id='username' />
                             <p className=" text-red-500">{errors.username?.message}</p>
                         </div>
-                        <div className="w-full px-3">
-                            <label className="block tracking-wide text-gray-900 text-xl font-bold mb-2" htmlFor="grid-password">
-                                Password
-                            </label>
-                            <input {...register("password")} className="appearance-none block w-full bg-gray-200 text-gray-900 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="password" placeholder="******************" />
+                        <div className="text-white mb-10">
+                            <label className="text-sm font-bold tracking-wide block" htmlFor="password">PASSWORD</label>
+                            <input {...register("password")} className="p-2 border-b-2 border-gray-600 bg-transparent w-[80%] outline-none" type="password" placeholder="Enter your password" id='password' />
                             <p className=" text-red-500">{errors.password?.message}</p>
                         </div>
-                        <div className="flex justify-center">
-                            <button type="submit" className="bg-[#dad6d6] hover:bg-transparent text-black font-semibold py-2 px-4 border hover:border-gray-600  rounded">Login</button>
+                        <div className="text-white mb-3">
+                            <button className="bg-[#6b5b95] text-gray-100 p-4 w-1/3 rounded-full tracking-wide
+                                font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-indigo-400
+                                shadow-lg">Login</button>
+                        </div>
+                        <div className="text-white">
+                            <Link to="/signup">
+                            <h4>Don't have an account?</h4>                            
+                            </Link>
                         </div>
                     </form>
                 </div>

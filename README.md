@@ -26,7 +26,7 @@ if cannot be connected to digital ocean server:
 (You should have a keygen in your localhost)
     eval "$(ssh-agent -s)" // to give access for public key
     ssh-add ~/.ssh/id_rsa
-    ssh root@ip
+    ssh root@206.189.136.194
 
 # postgres copying data from host to container
 // use pg_dump :

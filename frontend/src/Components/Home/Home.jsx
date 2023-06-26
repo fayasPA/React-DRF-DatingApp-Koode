@@ -163,7 +163,7 @@ function Home() {
                         <div className="w-1/2 ">
                             <img className="h-full w-full rounded-l-3xl object-fill" src={currentUser && `${baseimageUrl}${currentUser.image}`} alt="fayas" />
                         </div>
-                        <div className="flex flex-col pl-5  text-[#464242] font-extrabold justify-center items-start w-1/2 bg-[#c1c0ec] rounded-r-3xl">
+                        <div className="flex flex-col pl-5  text-black font-extrabold justify-center items-start w-1/2 bg-[#6b5b95] rounded-r-3xl">
                             <div className="text-3xl w-full">
                                 {currentUser?.username}, {currentUser?.age}
                             </div>

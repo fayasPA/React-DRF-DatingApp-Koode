@@ -1,5 +1,4 @@
 import { useContext, useEffect } from "react";
-import NavBar from "../../Components/NavBar/NavBar"
 import SignUp from "../../Components/SignUp/SignUp"
 import AuthContext from "../../Context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -13,8 +12,7 @@ function SignUpPage() {
         }
     }, [_user], navigate)
     return (
-        <div>
-            <NavBar />
+        <div className="bg-black h-screen">
             <SignUp />
         </div>
     )
